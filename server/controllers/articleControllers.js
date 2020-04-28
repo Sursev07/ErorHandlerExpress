@@ -6,9 +6,7 @@ class articleController{
         .then(data => {
             res.status(200).json(data)
         })
-        .catch(err => {
-            next(err)
-        })
+        .catch(next)
     }
 
     static addArticle(req, res, next){
@@ -48,14 +46,18 @@ class articleController{
         })
     }
 
-    static deleteArticle(req, res){
+    static deleteArticle(req, res, next){
      var id = req.params.id
       Article.destroy({where : {id: id}})
       .then(data => {
-          res.status(200).json(data)
+          //console.log('aaa')
+         if(data == 1){
+              res.status(200).json(data)
+          }
+          next({name : "DataNotFound"})
       })
       .catch(err => {
-          console.log(err)
+          next(err)
       })
     }
 }
